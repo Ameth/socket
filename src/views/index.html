@@ -5,11 +5,22 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <title>Servidor con Express y Socket.io</title>
 </head>
 
 <body>
     <h1>Funciona!</h1>
+    <p id="text"></p>
+    <input type="text" name="mensaje" id="mensaje">
+    <button id="enviar">Enviar al servidor</button>
+    <br>
+    <button id="saludar">Saludar al último</button>
+
+    <p id="mensajes"></p>
+
+    <div id="circle"></div>
+
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="/js/index.js"></script>
