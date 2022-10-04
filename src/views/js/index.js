@@ -1,4 +1,53 @@
-const socket = io();
+// Namspace socket
+const grupo = document.getElementById("grupo");
+const chat = document.getElementById("chat");
+const usuariochat = document.getElementById("usuariochat");
+const mensajechat = document.getElementById("mensajechat");
+const enviarchat = document.getElementById("enviarchat");
+const namespace = document.getElementById("namespace");
+
+let grupoActual = "";
+
+function cambiarGrupo() {
+  if (grupo.value == "admin") {
+    socket = io("/admin");
+    grupoActual = "Administradores";
+  } else {
+    socket = io("/user");
+    grupoActual = "Usuarios";
+  }
+
+  socket.on("connect", () => {
+    namespace.innerText = grupoActual;
+  });
+}
+
+function enviarMensaje() {
+  socket.emit("sendchat", {
+    mensaje: mensajechat.value,
+    user: usuariochat.value,
+  });
+
+  mensajechat.value = "";
+}
+
+enviarchat.addEventListener("click", enviarMensaje);
+
+grupo.addEventListener("change", cambiarGrupo);
+
+cambiarGrupo();
+
+socket.on("mensajes", (mensajes) => {
+  const { user, mensaje } = mensajes;
+
+  const li = document.createElement("li");
+
+  li.innerText = `${user}: ${mensaje}`;
+
+  chat.appendChild(li);
+});
+
+// const socket = io();
 
 // function checkSocketStatus() {
 //   console.log("Estado del socket:", socket.connected);
@@ -26,33 +75,33 @@ const socket = io();
 //   console.log("¡Reconexión exitosa!");
 // });
 
-const text = document.getElementById("text");
-const btn = document.getElementById("enviar");
-const btnSaludar = document.getElementById("saludar");
-const mensaje = document.getElementById("mensaje");
-const mensajes = document.getElementById("mensajes");
+// const text = document.getElementById("text");
+// const btn = document.getElementById("enviar");
+// const btnSaludar = document.getElementById("saludar");
+// const mensaje = document.getElementById("mensaje");
+// const mensajes = document.getElementById("mensajes");
 
-socket.on("bienvenido", (data) => {
-  console.log(data);
-  text.innerText = data;
-});
+// socket.on("bienvenido", (data) => {
+//   console.log(data);
+//   text.innerText = data;
+// });
 
-socket.on("todos", (data) => {
-  mensajes.innerHTML += data + "<br>";
-});
+// socket.on("todos", (data) => {
+//   mensajes.innerHTML += data + "<br>";
+// });
 
-socket.on("saludo", (data) => {
-  mensajes.innerHTML += data + "<br>";
-});
+// socket.on("saludo", (data) => {
+//   mensajes.innerHTML += data + "<br>";
+// });
 
-btn.addEventListener("click", () => {
-  socket.emit("cliente", mensaje.value);
-  mensaje.value = "";
-});
+// btn.addEventListener("click", () => {
+//   socket.emit("cliente", mensaje.value);
+//   mensaje.value = "";
+// });
 
-btnSaludar.addEventListener("click", () => {
-  socket.emit("saludar_last", "Bienvenido al grupo");
-});
+// btnSaludar.addEventListener("click", () => {
+//   socket.emit("saludar_last", "Bienvenido al grupo");
+// });
 
 /*
     On → Se usa para detectar (o escuchar) un evento varias veces.
@@ -78,39 +127,76 @@ btnSaludar.addEventListener("click", () => {
 //   socket.off("apagar", listener);
 // }, 2000);
 
-const circle = document.getElementById("circle");
+// const circle = document.getElementById("circle");
 
-const dragcircle = (position) => {
-  circle.style.top = position.top;
-  circle.style.left = position.left;
-};
+// const dragcircle = (position) => {
+//   circle.style.top = position.top;
+//   circle.style.left = position.left;
+// };
 
-const drag = (e) => {
-  //   console.log(e);
-  //   const clientX = e.clientX;
-  //   const clientY = e.clientY;
+// const drag = (e) => {
+//   //   console.log(e);
+//   //   const clientX = e.clientX;
+//   //   const clientY = e.clientY;
 
-  const position = {
-    top: e.clientY + "px",
-    left: e.clientX + "px",
-  };
+//   const position = {
+//     top: e.clientY + "px",
+//     left: e.clientX + "px",
+//   };
 
-  dragcircle(position);
+//   dragcircle(position);
 
-  socket.emit("circle_position", position);
+//   socket.emit("circle_position", position);
 
-  //   circle.style.top = clientY + "px";
-  //   circle.style.left = clientX + "px";
-};
+//   //   circle.style.top = clientY + "px";
+//   //   circle.style.left = clientX + "px";
+// };
 
-document.addEventListener("mousedown", (e) => {
-  document.addEventListener("mousemove", drag);
-});
+// document.addEventListener("mousedown", (e) => {
+//   document.addEventListener("mousemove", drag);
+// });
 
-document.addEventListener("mouseup", (e) => {
-  document.removeEventListener("mousemove", drag);
-});
+// document.addEventListener("mouseup", (e) => {
+//   document.removeEventListener("mousemove", drag);
+// });
 
-socket.on("circle_move", (position) => {
-  dragcircle(position);
-});
+// socket.on("circle_move", (position) => {
+//   dragcircle(position);
+// });
+
+// conectar a salas
+// const connectRoom1 = document.getElementById("connectRoom1");
+// const connectRoom2 = document.getElementById("connectRoom2");
+// const connectRoom3 = document.getElementById("connectRoom3");
+
+// connectRoom1.addEventListener("click", () => {
+//   socket.emit("connectToRoom", "room1");
+// });
+
+// connectRoom2.addEventListener("click", () => {
+//   socket.emit("connectToRoom", "room2");
+// });
+
+// connectRoom3.addEventListener("click", () => {
+//   socket.emit("connectToRoom", "room3");
+// });
+
+// const sendMsg = document.getElementById("sendMsg");
+// const mensajeRoom = document.getElementById("mensajeRoom");
+
+// sendMsg.addEventListener("click", () => {
+//   socket.emit("msgRoom", mensajeRoom.value);
+
+//   mensajeRoom.value = "";
+// });
+
+// //Recibir el mensaje de todas las salas
+// socket.on("sendAllRooms", (data) => {
+//   const { mensaje, room } = data;
+
+//   const li = document.createElement("li");
+
+//   li.innerText = mensaje;
+
+//   document.getElementById(`${room}`).appendChild(li);
+// });

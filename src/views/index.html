@@ -19,7 +19,29 @@
 
     <p id="mensajes"></p>
 
-    <div id="circle"></div>
+    <ul class="room" id="room1"></ul>
+    <ul class="room" id="room2"></ul>
+    <ul class="room" id="room3"></ul>
+
+    <button id="connectRoom1">Room 1</button>
+    <button id="connectRoom2">Room 2</button>
+    <button id="connectRoom3">Room 3</button>
+    <br>
+    <input type="text" name="mensajeRoom" id="mensajeRoom">
+    <button id="sendMsg">Enviar mensaje a la sala</button>
+
+    <!-- <div id="circle"></div> -->
+
+
+    <h1>Chat de <span id="namespace"></span></h1>
+    <select name="grupo" id="grupo">
+        <option value="admin" selected>Admin</option>
+        <option value="user">User</option>
+    </select>
+    <input type="text" name="usuariochat" id="usuariochat">
+    <ul id="chat"></ul>
+    <input type="text" name="mensajechat" id="mensajechat">
+    <button id="enviarchat">Enviar mensaje al chat</button>
 
 
     <script src="/socket.io/socket.io.js"></script>
