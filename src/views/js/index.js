@@ -1,51 +1,51 @@
 // Namspace socket
-const grupo = document.getElementById("grupo");
-const chat = document.getElementById("chat");
-const usuariochat = document.getElementById("usuariochat");
-const mensajechat = document.getElementById("mensajechat");
-const enviarchat = document.getElementById("enviarchat");
-const namespace = document.getElementById("namespace");
+// const grupo = document.getElementById("grupo");
+// const chat = document.getElementById("chat");
+// const usuariochat = document.getElementById("usuariochat");
+// const mensajechat = document.getElementById("mensajechat");
+// const enviarchat = document.getElementById("enviarchat");
+// const namespace = document.getElementById("namespace");
 
-let grupoActual = "";
+// let grupoActual = "";
 
-function cambiarGrupo() {
-  if (grupo.value == "admin") {
-    socket = io("/admin");
-    grupoActual = "Administradores";
-  } else {
-    socket = io("/user");
-    grupoActual = "Usuarios";
-  }
+// function cambiarGrupo() {
+//   if (grupo.value == "admin") {
+//     socket = io("/admin");
+//     grupoActual = "Administradores";
+//   } else {
+//     socket = io("/user");
+//     grupoActual = "Usuarios";
+//   }
 
-  socket.on("connect", () => {
-    namespace.innerText = grupoActual;
-  });
-}
+//   socket.on("connect", () => {
+//     namespace.innerText = grupoActual;
+//   });
+// }
 
-function enviarMensaje() {
-  socket.emit("sendchat", {
-    mensaje: mensajechat.value,
-    user: usuariochat.value,
-  });
+// function enviarMensaje() {
+//   socket.emit("sendchat", {
+//     mensaje: mensajechat.value,
+//     user: usuariochat.value,
+//   });
 
-  mensajechat.value = "";
-}
+//   mensajechat.value = "";
+// }
 
-enviarchat.addEventListener("click", enviarMensaje);
+// enviarchat.addEventListener("click", enviarMensaje);
 
-grupo.addEventListener("change", cambiarGrupo);
+// grupo.addEventListener("change", cambiarGrupo);
 
-cambiarGrupo();
+// cambiarGrupo();
 
-socket.on("mensajes", (mensajes) => {
-  const { user, mensaje } = mensajes;
+// socket.on("mensajes", (mensajes) => {
+//   const { user, mensaje } = mensajes;
 
-  const li = document.createElement("li");
+//   const li = document.createElement("li");
 
-  li.innerText = `${user}: ${mensaje}`;
+//   li.innerText = `${user}: ${mensaje}`;
 
-  chat.appendChild(li);
-});
+//   chat.appendChild(li);
+// });
 
 // const socket = io();
 
@@ -127,6 +127,7 @@ socket.on("mensajes", (mensajes) => {
 //   socket.off("apagar", listener);
 // }, 2000);
 
+// Emitir mensaje de broadcasting
 // const circle = document.getElementById("circle");
 
 // const dragcircle = (position) => {
@@ -145,8 +146,9 @@ socket.on("mensajes", (mensajes) => {
 //   };
 
 //   dragcircle(position);
+//   console.log("Se envia evento al servidor");
 
-//   socket.emit("circle_position", position);
+//   socket.volatile.emit("circle_position", position);
 
 //   //   circle.style.top = clientY + "px";
 //   //   circle.style.left = clientX + "px";
@@ -200,3 +202,35 @@ socket.on("mensajes", (mensajes) => {
 
 //   document.getElementById(`${room}`).appendChild(li);
 // });
+
+// Enviar un token de autenticación
+const socket = io({
+  auth: {
+    token: "S-TRni1234",
+  },
+});
+
+const send = document.getElementById("send-all");
+const desconectar = document.getElementById("desconectar");
+const reconectar = document.getElementById("reconectar");
+let i = 1;
+send.addEventListener("click", () => {
+  //Validar que es conectado para poder enviar el mensaje
+  if (socket.connected) {
+    socket.emit("isConnect", `¡Esta conectado: ${i++}!`);
+  }
+});
+
+desconectar.addEventListener("click", () => {
+  socket.disconnect();
+});
+
+reconectar.addEventListener("click", () => {
+  socket.connect();
+});
+
+//En caso de error en el middleware
+socket.on("connect_error", (error) => {
+  console.log("Error de conexión:", error.message);
+  console.log(error.data);
+});
