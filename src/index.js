@@ -1,3 +1,6 @@
+// process.env.DEBUG = "*";
+// process.env.DEBUG = "engine, socket.io.socket, socket.io:client";
+
 const express = require("express");
 const path = require("path");
 const { createServer } = require("http");
