@@ -47,7 +47,7 @@
 //   chat.appendChild(li);
 // });
 
-// const socket = io();
+const socket = io();
 
 // function checkSocketStatus() {
 //   console.log("Estado del socket:", socket.connected);
@@ -128,43 +128,43 @@
 // }, 2000);
 
 // Emitir mensaje de broadcasting
-// const circle = document.getElementById("circle");
+const circle = document.getElementById("circle");
 
-// const dragcircle = (position) => {
-//   circle.style.top = position.top;
-//   circle.style.left = position.left;
-// };
+const dragcircle = (position) => {
+  circle.style.top = position.top;
+  circle.style.left = position.left;
+};
 
-// const drag = (e) => {
-//   //   console.log(e);
-//   //   const clientX = e.clientX;
-//   //   const clientY = e.clientY;
+const drag = (e) => {
+  //   console.log(e);
+  //   const clientX = e.clientX;
+  //   const clientY = e.clientY;
 
-//   const position = {
-//     top: e.clientY + "px",
-//     left: e.clientX + "px",
-//   };
+  const position = {
+    top: e.clientY + "px",
+    left: e.clientX + "px",
+  };
 
-//   dragcircle(position);
-//   console.log("Se envia evento al servidor");
+  dragcircle(position);
+  //   console.log("Se envia evento al servidor");
 
-//   socket.volatile.emit("circle_position", position);
+  socket.volatile.emit("circle_position", position);
 
-//   //   circle.style.top = clientY + "px";
-//   //   circle.style.left = clientX + "px";
-// };
+  //   circle.style.top = clientY + "px";
+  //   circle.style.left = clientX + "px";
+};
 
-// document.addEventListener("mousedown", (e) => {
-//   document.addEventListener("mousemove", drag);
-// });
+document.addEventListener("mousedown", (e) => {
+  document.addEventListener("mousemove", drag);
+});
 
-// document.addEventListener("mouseup", (e) => {
-//   document.removeEventListener("mousemove", drag);
-// });
+document.addEventListener("mouseup", (e) => {
+  document.removeEventListener("mousemove", drag);
+});
 
-// socket.on("circle_move", (position) => {
-//   dragcircle(position);
-// });
+socket.on("circle_move", (position) => {
+  dragcircle(position);
+});
 
 // conectar a salas
 // const connectRoom1 = document.getElementById("connectRoom1");
@@ -204,33 +204,33 @@
 // });
 
 // Enviar un token de autenticación
-const socket = io({
-  auth: {
-    token: "S-TRni1234",
-  },
-});
+// const socket = io({
+//   auth: {
+//     token: "S-TRni1234",
+//   },
+// });
 
-const send = document.getElementById("send-all");
-const desconectar = document.getElementById("desconectar");
-const reconectar = document.getElementById("reconectar");
-let i = 1;
-send.addEventListener("click", () => {
-  //Validar que es conectado para poder enviar el mensaje
-  if (socket.connected) {
-    socket.emit("isConnect", `¡Esta conectado: ${i++}!`);
-  }
-});
+// const send = document.getElementById("send-all");
+// const desconectar = document.getElementById("desconectar");
+// const reconectar = document.getElementById("reconectar");
+// let i = 1;
+// send.addEventListener("click", () => {
+//   //Validar que es conectado para poder enviar el mensaje
+//   if (socket.connected) {
+//     socket.emit("isConnect", `¡Esta conectado: ${i++}!`);
+//   }
+// });
 
-desconectar.addEventListener("click", () => {
-  socket.disconnect();
-});
+// desconectar.addEventListener("click", () => {
+//   socket.disconnect();
+// });
 
-reconectar.addEventListener("click", () => {
-  socket.connect();
-});
+// reconectar.addEventListener("click", () => {
+//   socket.connect();
+// });
 
-//En caso de error en el middleware
-socket.on("connect_error", (error) => {
-  console.log("Error de conexión:", error.message);
-  console.log(error.data);
-});
+// //En caso de error en el middleware
+// socket.on("connect_error", (error) => {
+//   console.log("Error de conexión:", error.message);
+//   console.log(error.data);
+// });

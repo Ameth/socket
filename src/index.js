@@ -5,10 +5,25 @@ const express = require("express");
 const path = require("path");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
+const { instrument } = require("@socket.io/admin-ui");
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["https://admin.socket.io"],
+    credentials: true,
+  },
+});
+
+instrument(io, {
+  // auth: false,
+  auth: {
+    type: "basic",
+    username: "admin",
+    password: "$2a$12$uK7TkpbLdyh8YeaqgEHIBOrQj2d7kVhXG/n81m.JN/YfQti4v4WLO",
+  },
+});
 
 app.use(express.static(path.join(__dirname, "views")));
 
@@ -85,13 +100,13 @@ io.on("connection", (socket) => {
   //   }, 3000);
 
   // Emitir mensajes de broadcasting
-  //   socket.on("circle_position", (position) => {
-  //     // io.emit -> emite el evento a todos los clientes, incluso al que lo llamó originalmente
-  //     // io.emit("circle_move", position);
+  socket.on("circle_position", (position) => {
+    // io.emit -> emite el evento a todos los clientes, incluso al que lo llamó originalmente
+    // io.emit("circle_move", position);
 
-  //     // socket.broadcast.emit -> emite el evento a todos los clientes, menos al cliente que lo llamo
-  //     socket.broadcast.emit("circle_move", position);
-  //   });
+    // socket.broadcast.emit -> emite el evento a todos los clientes, menos al cliente que lo llamo
+    socket.broadcast.emit("circle_move", position);
+  });
 
   //socket.io permite crear propiedades propias y darle cualquier valor
   //   socket.salaConectada = "";
